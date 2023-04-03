@@ -9,8 +9,8 @@ import throttle from 'lodash.throttle';
 
     function onUpdatingTime (data) {
     localStorage.setItem("videoplayer-current-time", data.seconds)
-    }
+    };
 
     const videoplayerCurrentTime = localStorage.getItem("videoplayer-current-time");
 
-    player.setCurrentTime(videoplayerCurrentTime );
+    player.setCurrentTime(videoplayerCurrentTime || 0);
