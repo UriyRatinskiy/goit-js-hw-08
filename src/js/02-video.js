@@ -13,4 +13,4 @@ import throttle from 'lodash.throttle';
 
     const videoplayerCurrentTime = localStorage.getItem("videoplayer-current-time");
 
-    player.setCurrentTime(videoplayerCurrentTime || 0);
+    player.setCurrentTime(videoplayerCurrentTime );
