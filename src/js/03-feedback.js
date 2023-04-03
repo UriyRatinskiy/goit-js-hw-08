@@ -4,16 +4,13 @@ const STORAGE_KEY = "feedback-form-state";
 
 const formData = {};
 
-const refs = {
-    form: document.querySelector('form'),
-    input: document.querySelector('input'),
-    textarea: document.querySelector('textarea'),
-};
+const form = document.querySelector('.feedback-form');
+const textarea = document.querySelector('textarea');
+const input = document.querySelector('input');
 
-populateFormData()
 
-refs.form.addEventListener('submit', onFormSubmit);
-refs.form.addEventListener('input', throttle(onFormInput, 500));
+form.addEventListener('submit', onFormSubmit);
+form.addEventListener('input', throttle(onFormInput, 500));
 
 function onFormInput (event) {
     formData[event.target.name] = event.target.value;
@@ -22,18 +19,39 @@ function onFormInput (event) {
 
 function onFormSubmit(event) {
     event.preventDefault();
-    console.log(formData);
-    event.currentTarget.reset();
-    localStorage.removeItem(STORAGE_KEY);
-}
+    if (input.value === '' || textarea.value === '') {
+        alert ('Please fill in all the fields!')
+    } else {
+        console.log(formData);
+        event.currentTarget.reset();  
+    };
+    }   
 
+    populateFormData()
 function populateFormData() {
     const savedInformation = localStorage.getItem(STORAGE_KEY);
 
-    if (savedInformation) {
-        const parsedInformation = JSON.parse(savedInformation);
-        refs.input.value = parsedInformation.email;
-        refs.textarea.value = parsedInformation.message;
-        return parsedInformation;
-    }
+    let parsedSaved;
+
+    if (savedInformation === null) {
+        parsedSaved = {};
+      } else {
+        parsedSaved = JSON.parse(savedInformation);
+
+        if (
+          parsedSaved['email'] && parsedSaved['message']
+        ) {
+          input.value = parsedSaved.email;
+          textarea.value = parsedSaved.message;
+          formData.email = parsedSaved.email;
+          formData.message = parsedSaved.message;
+        } else if (parsedSaved['email']) {
+          input.value = parsedSaved.email;
+          formData.email = parsedSaved.email;
+        } else if (parsedSaved['message']) {
+          textarea.value = parsedSaved.message;
+          formData.message = parsedSaved.message;
+        }
+      }
+ 
 }
